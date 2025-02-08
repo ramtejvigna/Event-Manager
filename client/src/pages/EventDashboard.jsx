@@ -124,14 +124,18 @@ const EventDashboard = () => {
                                 <option value="workshop">Workshop</option>
                                 <option value="meetup">Meetup</option>
                             </select>
+                            <label htmlFor="startDate">Start Date: </label>
                             <input
                                 type="date"
+                                name="startDate"
                                 value={filters.startDate}
                                 onChange={(e) => setFilters(prev => ({ ...prev, startDate: e.target.value }))}
                                 className="p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500"
                             />
+                            <label htmlFor="endDate">End Date: </label>
                             <input
                                 type="date"
+                                name="endDate"
                                 value={filters.endDate}
                                 onChange={(e) => setFilters(prev => ({ ...prev, endDate: e.target.value }))}
                                 className="p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500"
