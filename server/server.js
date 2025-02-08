@@ -25,7 +25,10 @@ const io = new Server(server, {
 connectDB();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+    origin: origins,
+    methods: ["GET", "POST"],
+}));
 app.use(express.json());
 
 // Routes
