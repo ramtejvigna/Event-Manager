@@ -18,10 +18,10 @@ const Home = () => {
             <div className="max-w-6xl mx-auto px-4 pt-20 pb-16">
                 <div className="text-center space-y-8 mb-16">
                     <div className="flex justify-center mb-6">
-                        <Calendar className="h-16 w-16 text-indigo-600 animate-bounce" />
+                        <Calendar className="h-16 w-16 text-[#2D336B] animate-bounce" />
                     </div>
                     <h1 className="text-5xl md:text-6xl font-bold">
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#143D60] to-[#2D336B]">
                             Elevate Your Events
                         </span>
                     </h1>
@@ -32,14 +32,14 @@ const Home = () => {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link
                             to="/create-event"
-                            className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-lg transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                            className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-[#7886C7] to-[#2D336B] text-white px-8 py-3 rounded-lg transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
                         >
                             <Zap className="h-5 w-5" />
                             <span>Create Event</span>
                         </Link>
                         <Link
                             to="/dashboard"
-                            className="inline-flex items-center justify-center space-x-2 bg-white text-indigo-600 border-2 border-indigo-600 px-8 py-3 rounded-lg transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                            className="inline-flex items-center justify-center space-x-2 bg-white text-[#2D336B] border-2 border-[#2D336B] px-8 py-3 rounded-lg transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
                         >
                             <Search className="h-5 w-5" />
                             <span>Explore Events</span>
@@ -84,7 +84,7 @@ const Home = () => {
                 </div>
                 
                 {/* Call to Action */}
-                <div className="mt-20 text-center bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white">
+                <div className="mt-20 text-center bg-gradient-to-r from-[#143D60] to-[#2D336B] rounded-2xl p-8 text-white">
                     <h2 className="text-3xl font-bold mb-4">Ready to Create Your Next Event?</h2>
                     <p className="text-lg mb-6 opacity-90">
                         Join thousands of event planners who trust our platform

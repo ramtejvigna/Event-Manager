@@ -50,11 +50,11 @@ const Register = () => {
                         {/* Header Section */}
                         <div className="space-y-4">
                             <div className="w-full flex justify-center">
-                                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center transform transition-transform duration-300 hover:rotate-12 hover:scale-110">
+                                <div className="w-16 h-16 bg-gradient-to-br from-[#143D60] to-[#2D336B] rounded-full flex items-center justify-center transform transition-transform duration-300 hover:rotate-12 hover:scale-110">
                                     <User className="w-8 h-8 text-white" />
                                 </div>
                             </div>
-                            <h2 className="text-2xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            <h2 className="text-2xl font-bold text-center bg-gradient-to-r from-[#143D60] to-[#2D336B] bg-clip-text text-transparent">
                                 Create Account
                             </h2>
                             <p className="text-sm text-center text-gray-500">
@@ -150,8 +150,8 @@ const Register = () => {
                                 type="submit"
                                 className="w-full relative group mt-6"
                             >
-                                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-60 group-hover:opacity-100 transition duration-300" />
-                                <div className="relative flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 py-3 px-4 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                                <div className="absolute -inset-0.5 bg-gradient-to-r from-[#143D60] to-[#2D336B] rounded-xl blur opacity-60 group-hover:opacity-100 transition duration-300" />
+                                <div className="relative flex items-center justify-center space-x-2 bg-gradient-to-r from-[#143D60] to-[#2D336B] py-3 px-4 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                                     <span className="text-white font-medium">Create Account</span>
                                     <ArrowRight className="w-5 h-5 text-white transform transition-transform duration-300 group-hover:translate-x-1" />
                                 </div>

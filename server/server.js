@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-const origins = ["http://localhost:5173"]
+const origins = ["https://event-manager-tau-ecru.vercel.app"]
 
 const io = new Server(server, {
     cors: {
