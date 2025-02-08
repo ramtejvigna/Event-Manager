@@ -80,7 +80,7 @@ const Navbar = () => {
                     <div className="md:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="text-white p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors duration-200"
+                            className="text-black p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors duration-200"
                         >
                             {isOpen ? (
                                 <X className="h-6 w-6" />
@@ -98,14 +98,14 @@ const Navbar = () => {
                             <>
                                 <Link
                                     to="/dashboard"
-                                    className="flex items-center space-x-2 text-white p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors duration-200"
+                                    className="flex items-center space-x-2 text-black p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors duration-200"
                                 >
                                     <Layout className="h-5 w-5" />
                                     <span>Dashboard</span>
                                 </Link>
                                 <Link
                                     to="/create-event"
-                                    className="flex items-center space-x-2 text-white p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors duration-200"
+                                    className="flex items-center space-x-2 text-black p-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors duration-200"
                                 >
                                     <PlusCircle className="h-5 w-5" />
                                     <span>Create Event</span>
