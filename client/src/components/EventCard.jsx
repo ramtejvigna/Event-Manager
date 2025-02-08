@@ -1,5 +1,33 @@
+import { useSocket } from '../contexts/SocketContext';
+import { useEffect, useState } from 'react';
+
 const EventCard = ({ event, handleEventClick }) => {
     const { title, description, date, location, imageUrl, attendees } = event;
+    const [currentAttendees, setCurrentAttendees] = useState(event.attendees);
+    const socket = useSocket();
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleEventUpdate = (data) => {
+            if (data.eventId === event._id) {
+                setCurrentAttendees(prev => {
+                    if (data.type === 'JOIN') {
+                        return [...new Set([...prev, data.userId])];
+                    } else if (data.type === 'LEAVE') {
+                        return prev.filter(id => id !== data.userId);
+                    }
+                    return prev;
+                });
+            }
+        };
+
+        socket.on('eventUpdated', handleEventUpdate);
+
+        return () => {
+            socket.off('eventUpdated', handleEventUpdate);
+        };
+    }, [socket, event._id]);
 
     return (
         <div 
@@ -23,7 +51,7 @@ const EventCard = ({ event, handleEventClick }) => {
                         <span className="font-medium">Location:</span> {location}
                     </p>
                     <p className="text-sm">
-                        <span className="font-medium">Attendees:</span> {attendees.length}
+                        <span className="font-medium">Attendees:</span> {currentAttendees.length}
                     </p>
                 </div>
             </div>

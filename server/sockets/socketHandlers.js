@@ -1,17 +1,47 @@
 export default (io) => {
     io.on('connection', (socket) => {
-        console.log('User connected');
+        console.log('User connected:', socket.id);
 
-        socket.on('joinEvent', (eventId) => {
-            socket.join(eventId);
+        // Handle joining an event
+        socket.on('joinEvent', async (data) => {
+            try {
+                const { eventId, userId } = data;
+                await socket.join(eventId);
+                
+                // Broadcast to all clients including sender
+                io.emit('eventUpdated', {
+                    type: 'JOIN',
+                    eventId,
+                    userId
+                });
+                
+                console.log(`User ${userId} joined event ${eventId}`);
+            } catch (error) {
+                console.error('Error in joinEvent:', error);
+            }
         });
 
-        socket.on('leaveEvent', (eventId) => {
-            socket.leave(eventId);
+        // Handle leaving an event
+        socket.on('leaveEvent', async (data) => {
+            try {
+                const { eventId, userId } = data;
+                await socket.leave(eventId);
+                
+                // Broadcast to all clients including sender
+                io.emit('eventUpdated', {
+                    type: 'LEAVE',
+                    eventId,
+                    userId
+                });
+                
+                console.log(`User ${userId} left event ${eventId}`);
+            } catch (error) {
+                console.error('Error in leaveEvent:', error);
+            }
         });
 
         socket.on('disconnect', () => {
-            console.log('User disconnected');
+            console.log('User disconnected:', socket.id);
         });
     });
 };

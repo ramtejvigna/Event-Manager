@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { useSocket } from '../../contexts/SocketContext';
+import { useSocket, useSocketEmit } from '../../contexts/SocketContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Tag, 
-  Loader2, 
-  UserPlus, 
-  UserMinus, 
-  AlertCircle,
-  Clock,
-  Share2,
-  MessageCircle
+import {
+    Calendar,
+    MapPin,
+    Users,
+    Tag,
+    Loader2,
+    UserPlus,
+    UserMinus,
+    AlertCircle,
+    Clock,
+    Share2,
+    MessageCircle
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -25,6 +25,7 @@ function EventDetails() {
     const [error, setError] = useState('');
     const { title } = useParams();
     const socket = useSocket();
+    const safeEmit = useSocketEmit();
     const { user } = useAuth();
 
     const id = location.state.event._id;
@@ -33,36 +34,37 @@ function EventDetails() {
         loadEvent();
 
         if (socket) {
+            // Join the event room
             socket.emit('joinEvent', id);
 
-            socket.on('attendeeJoined', (data) => {
-                setEvent(prev => ({
-                    ...prev,
-                    attendees: [...prev.attendees, data.attendee]
-                }));
+            // Listen for real-time updates
+            socket.on('eventUpdated', (data) => {
+                if (data.eventId === id) {
+                    setEvent(prev => {
+                        if (!prev) return prev;
+
+                        return {
+                            ...prev,
+                            attendees: data.type === 'JOIN'
+                                ? [...new Set([...prev.attendees, data.userId])]
+                                : prev.attendees.filter(a => a !== data.userId)
+                        };
+                    });
+                }
             });
 
-            socket.on('attendeeLeft', (data) => {
-                setEvent(prev => ({
-                    ...prev,
-                    attendees: prev.attendees.filter(a => a !== data.attendeeId)
-                }));
-            });
+            // Cleanup function
+            return () => {
+                socket.off('eventUpdated');
+            };
         }
-
-        return () => {
-            if (socket) {
-                socket.emit('leaveEvent', id);
-                socket.off('attendeeJoined');
-                socket.off('attendeeLeft');
-            }
-        };
     }, [id, socket]);
+
 
     const loadEvent = () => {
         setLoading(true);
         const eventDetails = location.state && location.state.event;
-        if(!eventDetails) {
+        if (!eventDetails) {
             setError('Failed to fetch event');
         } else {
             setEvent(eventDetails);
@@ -70,27 +72,36 @@ function EventDetails() {
         setLoading(false);
     }
 
-    const handleJoinEvent = async () => {
+    const handleAttendance = async () => {
         try {
             setActionLoading(true);
-            await api.post(`/api/events/${id}/join`);
-            loadEvent();
-            socket.emit('attendeeJoined', { eventId: id, attendee: user });
-        } catch (err) {
-            setError(err.response?.data?.message || 'Failed to join event');
-        } finally {
-            setActionLoading(false);
-        }
-    };
 
-    const handleLeaveEvent = async () => {
-        try {
-            setActionLoading(true);
-            await api.post(`/api/events/${id}/leave`);
+            if (isUserAttending()) {
+                // Leave event
+                await api.post(`/api/events/${id}/leave`);
+                safeEmit('leaveEvent', { eventId: id, userId: user.id });
+
+                // Update local state immediately
+                setEvent(prev => ({
+                    ...prev,
+                    attendees: prev.attendees.filter(a => a !== user.id)
+                }));
+            } else {
+                // Join event
+                await api.post(`/api/events/${id}/join`);
+                safeEmit('joinEvent', { eventId: id, userId: user.id });
+
+                // Update local state immediately
+                setEvent(prev => ({
+                    ...prev,
+                    attendees: [...prev.attendees, user.id]
+                }));
+            }
+        } catch (error) {
+            console.error('Error updating attendance:', error);
+            setError('Failed to update attendance');
+            // Reload event data in case of error to ensure consistency
             loadEvent();
-            socket.emit('attendeeLeft', { eventId: id, attendeeId: user.id });
-        } catch (err) {
-            setError(err.response?.data?.message || 'Failed to leave event');
         } finally {
             setActionLoading(false);
         }
@@ -210,42 +221,33 @@ function EventDetails() {
                                         <MessageCircle className="w-5 h-5 text-gray-600" />
                                     </button>
                                 </div>
-                                
-                                {!isUserAttending() ? (
-                                    <button
-                                        onClick={handleJoinEvent}
-                                        disabled={actionLoading || isEventFull()}
-                                        className={`w-full flex items-center justify-center px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 ${
-                                            isEventFull() 
-                                                ? 'bg-gray-400 cursor-not-allowed' 
-                                                : 'bg-blue-500 hover:bg-blue-600'
+
+                                <button
+                                    onClick={handleAttendance}
+                                    disabled={actionLoading || isEventFull()}
+                                    className={`w-full flex items-center justify-center px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 ${isEventFull()
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-blue-500 hover:bg-blue-600'
                                         }`}
-                                    >
-                                        {actionLoading ? (
-                                            <Loader2 className="w-5 h-5 animate-spin" />
-                                        ) : (
-                                            <>
-                                                <UserPlus className="w-5 h-5 mr-2" />
-                                                {isEventFull() ? 'Event Full' : 'Join Event'}
-                                            </>
-                                        )}
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={handleLeaveEvent}
-                                        disabled={actionLoading}
-                                        className="w-full flex items-center justify-center px-4 py-2 rounded-lg text-white font-medium bg-red-500 hover:bg-red-600 transition-all duration-200"
-                                    >
-                                        {actionLoading ? (
-                                            <Loader2 className="w-5 h-5 animate-spin" />
-                                        ) : (
-                                            <>
-                                                <UserMinus className="w-5 h-5 mr-2" />
-                                                Leave Event
-                                            </>
-                                        )}
-                                    </button>
-                                )}
+                                >
+                                    {actionLoading ? (
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                    ) : (
+                                        <>
+                                            {isUserAttending() ? (
+                                                <>
+                                                    <UserMinus className="w-5 h-5 mr-2" />
+                                                    Leave Event
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <UserPlus className="w-5 h-5 mr-2" />
+                                                    Join Event
+                                                </>
+                                            )}
+                                        </>
+                                    )}
+                                </button>
                             </div>
                         </div>
 
