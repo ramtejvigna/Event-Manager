@@ -1,4 +1,5 @@
 # Event Manager
+#### Live Demo - [https://event-manager-tau-ecru.vercel.app/](https://event-manager-tau-ecru.vercel.app/)
 
 ## Overview
 Event Manager is a full-stack event management platform that allows users to create, manage, and view events. The platform includes user authentication, real-time attendee updates, and event creation and management tools. It is built using the MERN stack and deployed on free-tier hosting services.
