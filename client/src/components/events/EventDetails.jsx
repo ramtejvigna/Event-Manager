@@ -12,8 +12,8 @@ import {
     UserMinus,
     AlertCircle,
     Clock,
-    Share2,
-    MessageCircle
+    // Share2,
+    // MessageCircle
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -207,7 +207,7 @@ function EventDetails() {
                             </div>
 
                             <div className="space-y-4">
-                                <div className="flex justify-end space-x-4">
+                                {/* <div className="flex justify-end space-x-4">
                                     <button
                                         className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
                                         title="Share Event"
@@ -220,7 +220,7 @@ function EventDetails() {
                                     >
                                         <MessageCircle className="w-5 h-5 text-gray-600" />
                                     </button>
-                                </div>
+                                </div> */}
 
                                 <button
                                     onClick={handleAttendance}
