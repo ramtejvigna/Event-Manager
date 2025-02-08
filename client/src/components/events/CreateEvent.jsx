@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, MapPin, Users, Image as ImageIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../../services/api';
@@ -8,6 +8,14 @@ const CreateEvent = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    const fileInputRef = useRef(null);
+
+    const handleContainerClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
 
     const [formData, setFormData] = useState({
         title: '',
@@ -210,7 +218,7 @@ const CreateEvent = () => {
                             <ImageIcon className="w-4 h-4" />
                             Event Image
                         </label>
-                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors duration-200">
+                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors duration-200" onClick={handleContainerClick}>
                             <div className="space-y-1 text-center">
                                 <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
                                 <div className="flex text-sm text-gray-600">
