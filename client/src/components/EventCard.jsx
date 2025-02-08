@@ -4,7 +4,7 @@ const EventCard = ({ event, handleEventClick }) => {
     return (
         <div 
             onClick={() => handleEventClick(event)}
-            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
+            className="bg-white h-full rounded-lg shadow-md overflow-hidden cursor-pointer">
             {imageUrl && (
                 <img
                     src={imageUrl}

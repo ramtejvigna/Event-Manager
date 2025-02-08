@@ -11,7 +11,7 @@ export const register = async (req, res) => {
         await user.save();
 
         const token = generateToken(user._id);
-        res.status(201).json({ token, user: user });
+        res.status(201).json({ jwTtoken: token, user: user });
     } catch (error) {
         res.status(500).json({ message: "Error registering user" })
     }

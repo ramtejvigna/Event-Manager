@@ -33,7 +33,8 @@ const Register = () => {
         try {
             const response = await api.post('/api/auth/register', formData);
             const userData = response.data.user;
-            await login(userData);
+            const token = response.data.jwtToken;
+            await login(userData, token);
             navigate('/dashboard');
         } catch (err) {
             console.error(err);
