@@ -27,7 +27,7 @@ export const login = async (req, res) => {
         }
 
         const token = generateToken(user._id);
-        res.json({ token, user: { id: user._id, email: user.email, name: user.name } });
+        res.json({ jwTtoken: token, user: { id: user._id, email: user.email, name: user.name } });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
